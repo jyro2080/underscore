@@ -67,18 +67,14 @@
   // Handles objects implementing `forEach`, arrays, and raw objects.
   // Delegates to **ECMAScript 5**'s native `forEach` if available.
   var each = _.each = _.forEach = function(obj, iterator, context) {
-    try {
-      if (nativeForEach && obj.forEach === nativeForEach) {
-        obj.forEach(iterator, context);
-      } else if (_.isNumber(obj.length)) {
-        for (var i = 0, l = obj.length; i < l; i++) iterator.call(context, obj[i], i, obj);
-      } else {
-        for (var key in obj) {
-          if (hasOwnProperty.call(obj, key)) iterator.call(context, obj[key], key, obj);
-        }
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context);
+    } else if (_.isNumber(obj.length)) {
+      for (var i = 0, l = obj.length; i < l; i++) iterator.call(context, obj[i], i, obj);
+    } else {
+      for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) iterator.call(context, obj[key], key, obj);
       }
-    } catch(e) {
-      if (e != breaker) throw e;
     }
     return obj;
   };
